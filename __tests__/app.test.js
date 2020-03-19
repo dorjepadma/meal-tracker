@@ -33,7 +33,7 @@ describe('app routes', () => {
         ingredients: [
           {
             name: 'chocolate chips',
-            amount: '1',
+            amount: 1,
             measurement: 'cup'
           }
         ],
@@ -50,8 +50,9 @@ describe('app routes', () => {
           ],
           ingredients: [
             {
+              _id: expect.any(String),
               name: 'chocolate chips',
-              amount: '1',
+              amount: 1,
               measurement: 'cup'
             }
           ],
@@ -78,19 +79,36 @@ describe('app routes', () => {
         });
       });
   });
-  it('get a recipe by id', async() => {
+  it('gets a recipe by id', async() => {
     const recipe = await Recipe.create({ 
       name: 'cookies', 
-      directions: [],
-      ingredients: [] });
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+      ingredients: [{
+        name: 'chocolate chips',
+        amount: 1,
+        measurement: 'cup'
+      }] });
     return request(app)
       .get(`/api/v1/recipes/${recipe._id}`)
       .then(res => {
         expect(res.body).toEqual({
           _id: recipe._id.toString(),
           name: 'cookies',
-          directions: [],
-          ingredients: [],
+          directions: ['preheat oven to 375',
+            'mix ingredients',
+            'put dough on cookie sheet',
+            'bake for 10 minutes'],
+          ingredients: [{
+            _id: expect.any(String),
+            name: 'chocolate chips',
+            amount: 1,
+            measurement: 'cup'
+          }],
           __v: 0
         });
       });
@@ -107,7 +125,7 @@ describe('app routes', () => {
       ingredients: [
         {
           name: 'chocolate chips',
-          amount: '1',
+          amount: 1,
           measurement: 'cup'
         }
       ],
@@ -115,7 +133,7 @@ describe('app routes', () => {
 
     return request(app)
       .patch(`/api/v1/recipes/${recipe._id}`)
-      .send({ name: 'good cookies' })
+      .send({ name: 'Cookies' })
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
@@ -128,8 +146,9 @@ describe('app routes', () => {
           ],
           ingredients: [
             {
+              _id: expect.any(String),
               name: 'chocolate chips',
-              amount: '1',
+              amount: 1,
               measurement: 'cup'
             }
           ],
